@@ -3,14 +3,14 @@
 #include <REG52.h>
 
 unsigned char BeatCode[8] = {
-    0x6,
-    0x7,
-    0x3,
-    0xb,
-    0x9,
-    0xD,
+     0xE,
     0xC,
-    0xE,
+    0xD,
+    0x9,
+    0xb,
+    0x3,
+    0x7,
+    0x6,
 };
 
 unsigned int i;
@@ -18,10 +18,10 @@ unsigned int i;
 sbit Buzzer = P1 ^ 6;
 
 //蜂鸣器是否响
-bit start=0;
+bit start = 0;
 
 void TurnMotor(unsigned long angle);
-
+void delay();
 void main()
 {
     EA = 1;
@@ -32,7 +32,6 @@ void main()
     ET0 = 1;
     TR0 = 1;
 
-    TurnMotor(450);
     while (1)
     {
     }
@@ -41,16 +40,31 @@ void main()
 void InterruptTimer0() interrupt 1
 {
 
+    //用来判断记录1秒的cnt
     static unsigned int cnt = 0;
+
+    //用来判断记录2秒的cnt
+    static unsigned int cnt_2 = 0;
 
     TH0 = 0xFC;
     TL0 = 0x67;
     P0 = 0xFF;
 
     cnt++;
+    cnt_2++;
+
+    if (cnt_2 > 2000)
+    {
+        TurnMotor(30);
+        cnt_2 = 0;
+    }
+
     if (cnt > 1000)
     {
+        Buzzer = ~Buzzer;
         cnt = 0;
+        delay();
+        Buzzer = ~Buzzer;
     }
 }
 
@@ -77,7 +91,16 @@ void TurnMotor(unsigned long angle)
             index = 0;
         }
 
-        sleep(10);
+        delay();
     }
     P1 = P1 | 0x0f;
+}
+
+void delay()
+{
+    unsigned int i = 200;
+    while (i--)
+    {
+        /* code */
+    };
 }
