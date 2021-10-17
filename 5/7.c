@@ -97,10 +97,34 @@ void PlayTwoTiger()
     unsigned int soundTime = 0; //当前节拍需发声时间
 
     //两只老虎音符表
-    unsigned char code TwoTigerNote[] = {1,2,3,1,1,2,3,1,3,4,5,3,4,5,5,6,5,4,3,1,5,6,5,4,3,1,1,5,1,1,5,1};
+    unsigned char code TwoTigerNote[] =
+    {
+        1,1,5,5,
+        6,6,5,
+        4,4,3,3,
+        2,2,1,
+        5,5,4,4,
+        3,3,2,
+        5,5,4,4,
+        3,3,2,
+        1,1,5,5,
+        6,6,5,
+        4,4,3,3,
+        2,2,1
+
+    };
 
     //两只老虎节拍表，4表示一拍，1就是1/4拍，8就是2拍
-    unsigned char code TwoTigerBeat[] = {4,4,4,4,4,4,4,4,4,4,8,4,4,8,3,1,3,1,4,4,3,1,3,1,4,4,4,4,8,4,4,8};
+    unsigned char code TwoTigerBeat[] = 
+    {4,4,4,4,
+    4,4,8,
+    4,4,4,4,
+    4,4,8,
+    4,4,4,4,
+    4,4,8,
+    4,4,4,4,
+    4,4,8
+    };
 
     for (beat = 0; beat < sizeof(TwoTigerNote);)
 
