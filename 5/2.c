@@ -1,35 +1,28 @@
 #include <REG52.H>
 
 unsigned char BeatCode[8] = {
-    0xE,
-    0xC,
-    0xD,
-    0x9,
-    0xb,
-    0x3,
-    0x7,
     0x6,
+    0x7,
+    0x3,
+    0xb,
+    0x9,
+    0xD,
+    0xC,
+    0xE,
 };
 
-
-
-
 void sleep(time);
-
+void delay();
 void TurnMotor(unsigned long angle);
-
-
 
 void main()
 {
-    
-      
+
     while (1)
     {
         /* code */
-        TurnMotor(45);
-        sleep(20000);
-       
+        TurnMotor(90);
+        sleep(30000);
     };
 }
 
@@ -56,7 +49,7 @@ void TurnMotor(unsigned long angle)
             index = 0;
         }
 
-        sleep(10);
+        delay();
     }
     P1 = P1 | 0x0f;
 }
@@ -86,3 +79,4 @@ void sleep(time)
         }
     }
 }
+

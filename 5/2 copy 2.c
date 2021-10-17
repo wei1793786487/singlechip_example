@@ -1,36 +1,57 @@
-#include <REG52.H>
+
+
+#include <REG52.h>
 
 unsigned char BeatCode[8] = {
-    0xE,
-    0xC,
-    0xD,
-    0x9,
-    0xb,
-    0x3,
-    0x7,
     0x6,
+    0x7,
+    0x3,
+    0xb,
+    0x9,
+    0xD,
+    0xC,
+    0xE,
 };
 
+unsigned int i;
 
+sbit Buzzer = P1 ^ 6;
 
-
-void sleep(time);
+//蜂鸣器是否响
+bit start=0;
 
 void TurnMotor(unsigned long angle);
 
-
-
 void main()
 {
-    
-      
+    EA = 1;
+
+    TMOD = 0x01;
+    TH0 = 0xFC;
+    TL0 = 0x67;
+    ET0 = 1;
+    TR0 = 1;
+
+    TurnMotor(450);
     while (1)
     {
-        /* code */
-        TurnMotor(45);
-        sleep(20000);
-       
-    };
+    }
+}
+
+void InterruptTimer0() interrupt 1
+{
+
+    static unsigned int cnt = 0;
+
+    TH0 = 0xFC;
+    TL0 = 0x67;
+    P0 = 0xFF;
+
+    cnt++;
+    if (cnt > 1000)
+    {
+        cnt = 0;
+    }
 }
 
 void TurnMotor(unsigned long angle)
@@ -59,30 +80,4 @@ void TurnMotor(unsigned long angle)
         sleep(10);
     }
     P1 = P1 | 0x0f;
-}
-
-void sleep(time)
-{
-    unsigned int cnt = 0;
-    unsigned char end = 0;
-    TMOD = 0x01;
-    TH1 = 0xFC;
-    TL1 = 0x64;
-    TR1 = 1;
-    while (end == 0)
-    {
-        if (TF1 == 1)
-        {
-
-            TF1 = 0;
-            TH1 = 0xFC;
-            TL1 = 0x64;
-            cnt++;
-            if (cnt >= time)
-            {
-                cnt = 0;
-                end = 1;
-            }
-        }
-    }
 }

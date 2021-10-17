@@ -1,36 +1,55 @@
-#include <REG52.H>
+
+
+#include <REG52.h>
 
 unsigned char BeatCode[8] = {
-    0xE,
-    0xC,
-    0xD,
-    0x9,
-    0xb,
-    0x3,
-    0x7,
     0x6,
+    0x7,
+    0x3,
+    0xb,
+    0x9,
+    0xD,
+    0xC,
+    0xE,
 };
 
+//这个项目没有使用串口来控制 我没懂意思
+unsigned int i;
+sbit Buzzer = P1 ^ 6;
 
-
-
-void sleep(time);
+//蜂鸣器是否响
+bit start;
 
 void TurnMotor(unsigned long angle);
-
-
-
+void delay();
 void main()
 {
-    
-      
+    EA = 1;
+
+    TMOD = 0x01;
+    TH0 = 0xFC;
+    TL0 = 0x67;
+    ET0 = 1;
+    TR0 = 1;
+
+    TurnMotor(450);
+    start = 1;
     while (1)
     {
-        /* code */
-        TurnMotor(45);
-        sleep(20000);
-       
-    };
+    }
+}
+
+void InterruptTimer0() interrupt 1
+{
+
+    TH0 = 0xFC;
+    TL0 = 0x67;
+    P0 = 0xFF;
+
+    if (start)
+    {
+        Buzzer = ~Buzzer;
+    }
 }
 
 void TurnMotor(unsigned long angle)
@@ -55,34 +74,16 @@ void TurnMotor(unsigned long angle)
         {
             index = 0;
         }
-
-        sleep(10);
+        delay();
     }
     P1 = P1 | 0x0f;
 }
 
-void sleep(time)
+void delay()
 {
-    unsigned int cnt = 0;
-    unsigned char end = 0;
-    TMOD = 0x01;
-    TH1 = 0xFC;
-    TL1 = 0x64;
-    TR1 = 1;
-    while (end == 0)
+    unsigned int i = 200;
+    while (i--)
     {
-        if (TF1 == 1)
-        {
-
-            TF1 = 0;
-            TH1 = 0xFC;
-            TL1 = 0x64;
-            cnt++;
-            if (cnt >= time)
-            {
-                cnt = 0;
-                end = 1;
-            }
-        }
-    }
+        /* code */
+    };
 }
