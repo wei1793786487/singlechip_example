@@ -74,14 +74,13 @@ void main()
     while (1)
 
     {
-        PlayTwoTiger(); //播放乐曲--两支老虎
+        PlayTwoTiger(); //播放乐曲--小星星
 
         for (i = 0; i < 40000; i++)
             ; //停止一段时间
     }
 }
 
-/* 两只老虎乐曲播放函数 */
 
 void PlayTwoTiger()
 
@@ -96,7 +95,8 @@ void PlayTwoTiger()
 
     unsigned int soundTime = 0; //当前节拍需发声时间
 
-    //两只老虎音符表
+    //小星星音符表
+    //只要修改为对应的街拍就可以 
     unsigned char code TwoTigerNote[] =
     {
         1,1,5,5,

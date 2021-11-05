@@ -17,7 +17,7 @@ sbit KEY_OUT_3 = P2 ^ 1;
 sbit KEY_OUT_4 = P2 ^ 0;
 
 //这里的index是行的索引，所以下面只要定义一个列的索引就行了
-//定义太多变量给单片机整的没内存的可还行
+//这里注意数组放进内存中会导致单片机的内存不足 常量的定义尽量为static
 static signed char index = 0;
 
 unsigned char frame_column_index = 0;
