@@ -9,40 +9,20 @@ sbit ENLED = P1 ^ 4;
 
 sbit KEY_IN_1 = P2 ^ 4;
 sbit KEY_IN_2 = P2 ^ 5;
-sbit KEY_IN_3 = P2 ^ 6;
+sbit KEY_IN_3 = P2 ^ 6;``
 sbit KEY_IN_4 = P2 ^ 7;
 sbit KEY_OUT_1 = P2 ^ 3;
 sbit KEY_OUT_2 = P2 ^ 2;
 sbit KEY_OUT_3 = P2 ^ 1;
 sbit KEY_OUT_4 = P2 ^ 0;
+sbit LED = P0 ^ 5;
 
+sbit led2  =P0^6;
 
 unsigned char KeySta[4][4] = {
     {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}};
 
-unsigned char ledBuff[2] = {
-    0xff, 0xff};
 
-//每个数字的二进制的两个字符的映射
-unsigned char mapping[16][2] = {
-    {0xC6, 0xC0},
-    {0x8E, 0x90},
-    {0x88, 0x99},
-    {0x83, 0xC0},
-    {0x90, 0x90},
-    {0x90, 0xA4},
-    {0x80, 0xA4},
-
-    {0x8E, 0x80},
-    {0x80, 0xC0},
-    {0x90, 0xC0},
-    {0x80, 0x80},
-    {0x80, 0xB0},
-    {0xC6, 0x82},
-    {0x88, 0xF9},
-    {0x80, 0x82},
-    {0x80, 0x86},
-};
 
 void main()
 {
@@ -53,8 +33,8 @@ void main()
     EA = 1;
     ENLED = 0;
     ADDR3 = 1;
-    ADDR2 = 0;
-    ADDR1 = 0;
+    ADDR2 = 1;
+    ADDR1 = 1;
     ADDR0 = 0;
     TMOD = 0x01;
     TH0 = 0xFC;
@@ -64,7 +44,11 @@ void main()
  
 
     while (1)
-    { 
+    {
+        
+       
+       
+              
         for (i = 0; i < 4; i++)
         {
             for (j = 0; j < 4; j++)
@@ -73,23 +57,28 @@ void main()
                 {
                     if (backup[i][j] != 0)
                     {  
-                       
-                        ledBuff[0] = mapping[(i * 4 + j)][1];
-                        ledBuff[1] = mapping[(i * 4 + j)][0];
+                        if ((i * 4 + j)==5)
+                        {
+                          LED=~LED;
+                        }
+                        if ((i*4+j)==2)
+                        {
+                          led2= ~led2;
+                        }
 
-                     
                     }
                     backup[i][j] = KeySta[i][j];
                 }
+               
             }
         }
+       
     }
 }
 
 void InterruptTimer0() interrupt 1
 {   
-    //索引数码管
-    static unsigned char ffff = 0;
+ 
     unsigned char i;
     static unsigned char keyout = 0;
     static unsigned char keybuf[4][4] = {
@@ -139,24 +128,5 @@ void InterruptTimer0() interrupt 1
         break;
     }
 
-    P0 = 0xff;
-    switch (ffff)
-    {
-    case 0:
-        ADDR2 = 0;
-        ADDR1 = 0;
-        ADDR0 = 0;
-        ffff++;
-        P0 = ledBuff[0];
-        break;
-    case 1:
-        ADDR2 = 0;
-        ADDR1 = 0;
-        ADDR0 = 1;
-        ffff = 0;
-        P0 = ledBuff[1];
-        break;
-    default:
-        break;
-    }
+  
 }
